@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة معلومات مصر المتطورة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a5f7a; /* لون اساسي غامق */
+            --secondary-color: #f58a0e; /* لون ثانوي  */
+            --accent-color: #159895; /* لون تفاعلي */
+            --background-color: #002B5B; /* لون الخلفية */
+            --text-color: #F9F5EB; /* لون النص */
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+        body {
+            font-family: 'Almarai', sans-serif;
+            background: linear-gradient(135deg, var(--background-color), #001C30); /* تدرج لوني للخلفية */
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .dashboard {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); /* تأثير الضبابية للخلفية */
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px var(--shadow-color); /* ظلال */
+            width: 90%;
+            max-width: 1000px;
+        }
+        h1 {
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+            color: var(--secondary-color); /* لون العنوان */
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border: none;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            font-family: 'Almarai', sans-serif;
+            transition: all 0.3s ease;
+            appearance: none; /* لإخفاء السهم الافتراضي في بعض المتصفحات */
+        }
+        select::-ms-expand { /* لإخفاء السهم الافتراضي في Internet Explorer */
+            display: none;
+        }
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent-color); /* تظليل عند التركيز */
+        }
+        .info-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .info-item {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); /* تدرج لوني للبطاقات */
+            border-radius: 15px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px var(--shadow-color); /* ظلال */
+        }
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow-color); /* زيادة الظلال عند التمرير */
+        }
+        .icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: var(--secondary-color); /* لون الايقونات */
+        }
+        .info-content {
+            flex: 1;
+        }
+        .info-content strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-family: 'Cairo', sans-serif;
+            color: var(--secondary-color); /* لون العناوين */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>لوحة معلومات مصر المتطورة</h1>
+        <select id="attribute-select">
+            <option value="">اختر فئة المعلومات</option>
+            <option value="culture">الثقافة</option>
+            <option value="tourism">السياحة</option>
+            <option value="provinces">المحافظات</option>
+            <option value="projects">المشروعات القومية</option>
+        </select>
+        <div id="info-container" class="info-container"></div>
+    </div>
+
+    <script>
+        const egyptData = {
+            culture: [
+                { icon: 'fa-theater-masks', title: 'الفنون', content: 'السينما، المسرح، الموسيقى، الفن التشكيلي' },
+                { icon: 'fa-book', title: 'الأدب', content: 'نجيب محفوظ (جائزة نوبل في الأدب 1988)، طه حسين، يوسف إدريس' },
+                { icon: 'fa-music', title: 'الموسيقى', content: 'أم كلثوم، عبد الحليم حافظ، محمد عبد الوهاب' },
+                { icon: 'fa-film', title: 'السينما', content: 'صناعة سينمائية رائدة في العالم العربي منذ الثلاثينيات' },
+                { icon: 'fa-palette', title: 'الفن التشكيلي', content: 'محمود سعيد، محمود مختار، جاذبية سري' },
+                { icon: 'fa-mosque', title: 'العمارة الإسلامية', content: 'جامع ابن طولون، الجامع الأزهر، مسجد محمد علي' },
+                { icon: 'fa-utensils', title: 'المطبخ المصري', content: 'الكشري، الملوخية، الفتة، المحشي' },
+                { icon: 'fa-futbol', title: 'الرياضة', content: 'كرة القدم (الرياضة الأكثر شعبية)، كرة اليد، كرة السلة' },
+                { icon: 'fa-language', title: 'اللهجة المصرية', content: 'من أشهر اللهجات العربية وأكثرها انتشارًا' },
+                { icon: 'fa-drum', title: 'الموسيقى الشعبية', content: 'الموالد، الزار، الصعيدي' }
+            ],
+            tourism: [
+                { icon: 'fa-plane', title: 'عدد السياح سنويًا', content: 'حوالي 13 مليون (قبل جائحة كورونا)' },
+                { icon: 'fa-pyramid', title: 'الآثار الفرعونية', content: 'أهرامات الجيزة، معابد الأقصر والكرنك، وادي الملوك' },
+                { icon: 'fa-monument', title: 'المتاحف', content: 'المتحف المصري الكبير، متحف الحضارة المصرية' },
+                { icon: 'fa-water', title: 'السياحة الشاطئية', content: 'شرم الشيخ، الغردقة، مرسى علم' },
+                { icon: 'fa-fish', title: 'الغوص', content: 'الشعاب المرجانية في البحر الأحمر' },
+                { icon: 'fa-mosque', title: 'السياحة الدينية', content: 'الجامع الأزهر، الكنيسة المعلقة، دير سانت كاترين' },
+                { icon: 'fa-ship', title: 'الرحلات النيلية', content: 'من أسوان إلى الأقصر' },
+                { icon: 'fa-clipboard-list', title: 'مواقع التراث العالمي لليونسكو', content: '7 مواقع' },
+                { icon: 'fa-hotel', title: 'الفنادق', content: 'أكثر من 1200 فندق مصنف' },
+                { icon: 'fa-calendar-alt', title: 'أفضل وقت للزيارة', content: 'من أكتوبر إلى أبريل' }
+            ],
+            provinces: [
+                { icon: 'fa-map', title: 'عدد المحافظات', content: '27 محافظة' },
+                { icon: 'fa-city', title: 'أكبر المدن', content: 'القاهرة، الإسكندرية، الجيزة، شبرا الخيمة' },
+                { icon: 'fa-industry', title: 'المدن الصناعية', content: 'العاشر من رمضان، 6 أكتوبر، برج العرب الجديدة' },
+                { icon: 'fa-university', title: 'المدن الجامعية', content: 'القاهرة، الإسكندرية، المنصورة، أسيوط' },
+                { icon: 'fa-ship', title: 'المدن الساحلية', content: 'الإسكندرية، بورسعيد، دمياط، مرسى مطروح' },
+                { icon: 'fa-monument', title: 'المدن التاريخية', content: 'الأقصر، أسوان، الإسماعيلية، رشيد' },
+                { icon: 'fa-leaf', title: 'محافظات الدلتا', content: 'الدقهلية، الغربية، كفر الشيخ، الشرقية' },
+                { icon: 'fa-mountain', title: 'محافظات الصعيد', content: 'المنيا، سوهاج، قنا، أسوان' },
+                { icon: 'fa-sun', title: 'محافظات سيناء', content: 'شمال سيناء، جنوب سيناء' },
+                { icon: 'fa-road', title: 'العاصمة الإدارية الجديدة', content: 'مشروع مدينة جديدة شرق القاهرة' }
+            ],
+            projects: [
+                { icon: 'fa-city', title: 'العاصمة الإدارية الجديدة', content: 'مدينة ذكية جديدة شرق القاهرة' },
+                { icon: 'fa-solar-panel', title: 'محطة بنبان للطاقة الشمسية', content: 'أكبر محطة طاقة شمسية في العالم' },
+                { icon: 'fa-water', title: 'قناة السويس الجديدة', content: 'توسعة وتعميق القناة الأصلية' },
+                { icon: 'fa-train', title: 'القطار الكهربائي السريع', content: 'يربط العين السخنة بالعلمين الجديدة' },
+                { icon: 'fa-car', title: 'شبكة الطرق الجديدة', content: 'أكثر من 7000 كم من الطرق الجديدة' },
+                { icon: 'fa-industry', title: 'المنطقة الاقتصادية لقناة السويس', content: 'منطقة صناعية ولوجستية' },
+                { icon: 'fa-fish', title: 'مشروع الاستزراع السمكي', content: 'بركة غليون وغيرها' },
+                { icon: 'fa-seedling', title: 'مشروع المليون ونصف فدان', content: 'استصلاح أراضي زراعية جديدة' },
+                { icon: 'fa-atom', title: 'محطة الضبعة النووية', content: 'أول محطة نووية في مصر' },
+                { icon: 'fa-subway', title: 'توسعة مترو الأنفاق', content: 'إضافة خطوط جديدة في القاهرة الكبرى' }
+            ]
+        };
+
+        const attributeSelect = document.getElementById('attribute-select');
+        const infoContainer = document.getElementById('info-container');
+
+        attributeSelect.addEventListener('change', function() {
+            const selectedAttribute = this.value;
+            infoContainer.style.opacity = '0';
+            infoContainer.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                if (selectedAttribute) {
+                    infoContainer.innerHTML = egyptData[selectedAttribute].map(item => `
+                        <div class="info-item">
+                            <i class="icon fas ${item.icon}"></i>
+                            <div class="info-content">
+                                <strong>${item.title}</strong>
+                                ${item.content}
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    infoContainer.style.opacity = '1';
+                    infoContainer.style.transform = 'translateY(0)';
+                    
+                    const items = infoContainer.children;
+                    for (let i = 0; i < items.length; i++) {
+                        items[i].style.animation = `fadeIn 0.5s ease forwards ${i * 0.1}s`;
+                    }
+                } else {
+                    infoContainer.innerHTML = '';
+                }
+            }, 300);
+        });
+    </script>
+</body>
+</html>
